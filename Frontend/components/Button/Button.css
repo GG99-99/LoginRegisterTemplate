@@ -1,0 +1,14 @@
+
+.btn{
+     border-radius: var(--input-radius);
+    /* box-shadow: var(--btn-box-shd); */
+    font-size: var(--common-font-size);
+    padding: var(--input-padding);
+    cursor: pointer;
+    text-align: center;
+    background-color: #05a505b5;
+    color: white;
+    font-weight: 900;
+}
+
+

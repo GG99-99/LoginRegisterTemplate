@@ -1,0 +1,45 @@
+:root {
+  font-family: Arial, sans-serif;
+  
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  --select-color: rgb(46, 108, 255);
+
+  --card-box-shd: 0px 1px 1px rgba(9, 30, 66, 0.25), 0px 0px 1px 1px rgba(9, 30, 66, 0.13);
+  --card-border-radius: 15px;
+
+  --input-border: 1px solid #dadada;
+  --input-radius: 7px;
+  --input-padding: 12px;
+  --common-font-size: 15px;
+
+  --btn-box-shd:  rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;
+}
+
+*{
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+#root{
+  background-color: white;
+}
+
+a {
+  color: #000000;
+  text-decoration: none;
+}
+
+
+ul{
+    list-style: none;
+}
+
+input:focus{
+  outline: var(--select-color);
+}

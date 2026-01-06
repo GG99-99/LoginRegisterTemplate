@@ -1,0 +1,29 @@
+
+.inputCont{
+     position: relative;
+     width: 100%;
+}
+
+.inputCont input{
+     width: 100%;
+     padding: var(--input-padding);
+     border: var(--input-border);
+     font-size: var(--common-font-size);    
+     border-radius: var(--input-radius);
+     
+}
+
+.inputCont p{
+     position: absolute;
+     font-size: 12px;
+     background-color: white;
+     top: -7px;
+     left: 13px;
+     padding-left: 6px;
+     padding-right: 6px;
+}
+
+.inputCont input:focus{
+     outline: solid var(--select-color);
+     border: 1px solid transparent;
+}
