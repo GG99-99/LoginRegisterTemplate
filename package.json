@@ -1,0 +1,10 @@
+{
+	"name": "loginregister",
+	"type": "module",
+	"private": true,
+	"scripts": {
+		"dev:front": "pnpm --filter ./apps/frontend dev",
+    		"dev:back": "pnpm --filter ./apps/backend dev",
+		"dev": "pnpm -r dev"
+	}
+}
