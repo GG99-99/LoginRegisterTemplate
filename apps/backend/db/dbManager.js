@@ -6,10 +6,14 @@ import { dirname } from "path";
 import crypto from "crypto"
 import bcrypt from "bcrypt"
 
+import { userForRegister, userPublic } from './objSchemas.js';
+import { handle } from '../utils/promises/handle.js';
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const db = new Database(path.join(__dirname, "concilio.db" ))
+
+const db = new Database(path.join(__dirname, "database.db" ))
 
 
 
@@ -23,9 +27,10 @@ const createUserTable = `
           cedula text not null unique,
           password text not null,
           firstName text not null,
-          lastName text not null
+          lastName text not null,
+          rol text not null default normal
      )`
-db.exec(createUserTable)
+// db.exec(createUserTable)
 
 export class userdb{
 
@@ -33,29 +38,58 @@ export class userdb{
      static #getByCedula = db.prepare("select * from User where cedula = @cedula")
      static #insert = db.prepare("insert into User (id, cedula, password, firstName, lastName) values (@id, @cedula, @password, @firstName, @lastName)")
 
+     // return [err, bool]
      static async register(user){
+          let result = await userForRegister.safeParseAsync(user)
+          if(!result.success) return [result.error, null];
+
+
+          if(this.validateExistCedula(user.cedula)) return [new Error("La cedula ya existe"), null]
+
           const ID = crypto.randomUUID()
-          const hashPassword = await bcrypt.hash(password, 10)
+          let hashPassword = await this.hashPassword(user.password, user.cedula);
+         
 
-          let added = this.#insert.run({id: ID, password:hashPassword, cedula:user.cedula,  firstName:user.firstName, lastName:user.lastName})
+          this.#insert.run({
+               id: ID, 
+               password:hashPassword, 
+               cedula: user.cedula,  
+               firstName: user.firstName, 
+               lastName:user.lastName
+          })
+
+          return [null, true]
      }
 
-     static async login(cedula, password){
+     // return [err, userPublic]
+     static async login(data){
+          if(!this.validateSyntaxCedula(data.cedula)) return [new Error("Usuario o clave incorrectos"), null];
 
-          if(!this.validateCedula(cedula)) return false;
-          const user = this.#getByCedula.get({cedula: cedula})
-          const isValid = await bcrypt.compare(password, user.password)
-          if (!isValid) throw new Error("Username or Password is invalid");
-     }
+          const user = this.#getByCedula.get({cedula: data.cedula})
+          if(!user) return [new Error("Usuario o clave incorrectos"), null];
 
-     static validateCedula(cedula){
+          const [compareErr, isValid] = await handle(bcrypt.compare(data.password, user.password))
+          if (!isValid || compareErr) return [new Error("Usuario o clave incorrectos"), null];
+
+          return [null, userPublic.parse(user)]
           
-          try{
-               if(cedula.length != 11) throw new Error("not correct size")
-               if(!Number(cedula)) throw new Error("not number")
-               return true
-
-          }catch(e) {return false};
      }
 
+
+     static async hashPassword(password, cedula){
+          if(password.trim() === "") password = cedula.slice(-4);
+          let hashPassword = await bcrypt.hash(password, 10)
+          return hashPassword
+
+     }
+
+     static validateExistCedula(cedula){
+          let exist = this.#getByCedula.all({cedula: cedula})
+          if(exist.length === 0) return false
+          return true
+     }
+
+     static validateSyntaxCedula(cedula){
+             return /^\d+$/.test(cedula)
+     }
 }

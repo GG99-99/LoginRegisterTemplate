@@ -1,0 +1,59 @@
+├── .DS_Store
+├── .gitignore
+├── apps
+│  ├── backend
+│  │  ├── .env
+│  │  ├── app.js
+│  │  ├── db
+│  │  │  ├── database.db
+│  │  │  └── dbManager.js
+│  │  ├── package.json
+│  │  └── routes
+│  │    ├── apiRoutes.js
+│  │    ├── login.js
+│  │    └── validate.js
+│  └── frontend
+│    ├── .DS_Store
+│    ├── dist
+│    │  ├── assets
+│    │  │  ├── index-Ci6s0A3x.css
+│    │  │  ├── index-DD6WwYci.js
+│    │  │  └── index-DD6WwYci.js.map
+│    │  └── index.html
+│    ├── eslint.config.js
+│    ├── index.html
+│    ├── package.json
+│    ├── src
+│    │  ├── components
+│    │  │  ├── .DS_Store
+│    │  │  ├── AuthProvider
+│    │  │  │  └── AuthProvider.jsx
+│    │  │  ├── Button
+│    │  │  │  ├── Button.css
+│    │  │  │  └── Button.jsx
+│    │  │  ├── Container
+│    │  │  │  └── Container.jsx
+│    │  │  ├── Input
+│    │  │  │  ├── Input.css
+│    │  │  │  └── Input.jsx
+│    │  │  └── ValidateJWT
+│    │  │    └── ValidateJWT.jsx
+│    │  ├── containers
+│    │  │  ├── Aside
+│    │  │  │  ├── Aside.css
+│    │  │  │  └── Aside.jsx
+│    │  │  ├── FormLogin
+│    │  │  │  ├── FormLogin.css
+│    │  │  │  └── FormLogin.jsx
+│    │  │  ├── FormRegister
+│    │  │  │  └── FormRegister.jsx
+│    │  │  └── Home
+│    │  │    ├── Home.css
+│    │  │    └── Home.jsx
+│    │  ├── main.css
+│    │  └── main.jsx
+│    └── vite.config.js
+├── package.json
+├── pnpm-lock.yaml
+├── pnpm-workspace.yaml
+└── tree.tree

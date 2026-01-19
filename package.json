@@ -3,8 +3,13 @@
 	"type": "module",
 	"private": true,
 	"scripts": {
-		"dev:front": "pnpm --filter ./apps/frontend dev",
-    		"dev:back": "pnpm --filter ./apps/backend dev",
-		"dev": "pnpm -r dev"
+		"f": "cd ./apps/frontend && pnpm dev",
+		"b": "pnpm --filter ./apps/backend dev",
+		"dev": " pnpm -r dev",
+		"build": "pnpm --filter ./apps/frontend dev build"
+	},
+	"devDependencies": {
+		"@structure-codes/cli": "^0.0.6",
+		"concurrently": "^9.2.1"
 	}
 }

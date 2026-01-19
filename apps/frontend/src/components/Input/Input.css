@@ -7,7 +7,7 @@
 .inputCont input{
      width: 100%;
      padding: var(--input-padding);
-     border: var(--input-border);
+    
      font-size: var(--common-font-size);    
      border-radius: var(--input-radius);
      
@@ -23,7 +23,29 @@
      padding-right: 6px;
 }
 
-.inputCont input:focus{
+.good{
+      border: var(--input-border);
+}
+
+.good:focus{
      outline: solid var(--select-color);
      border: 1px solid transparent;
 }
+
+
+
+
+/********************************
+|   WHEN DE VALIDATION GOES BAD  |
+ ********************************/
+.bad{
+     outline: solid var(--bad-color);
+     border: none;
+}
+
+.bad:focus{
+     outline: solid var(--bad-color);
+     border: none;
+}
+
+

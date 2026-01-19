@@ -1,10 +1,14 @@
-import express from 'express'
-import { userdb } from '../db/dbManager.js'
+import express from "express";
+import "dotenv/config";
 
-export const router = express.Router()
+import {login} from "./login.js"
+import {validate} from "./validate.js"
+import { register } from "./register.js";
 
 
-router.post("/login", function (req, res){
-     console.log(req.body)
-})
+export const router = express.Router();
 
+router
+.get("/validate", validate)
+.post("/login", login)
+.post("/register", register)

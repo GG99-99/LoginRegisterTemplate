@@ -1,10 +1,11 @@
 
 import './Input.css'
-export let Input = ({txt, inputID, inputPlch}) => {
+export const Input = ({txt, valid, ...props}) => {
      return(
+
           <div className="inputCont">
+               <input   className={valid? 'good' :' bad'}  {...props} />
                <p>{txt}</p>
-               <input  id={inputID} placeholder={inputPlch}/>
           </div>
      )
 }
