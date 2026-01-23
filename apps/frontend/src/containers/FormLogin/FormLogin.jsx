@@ -1,7 +1,8 @@
 // import { text } from "express";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { handle } from "../../../utils/promises/handle";
+import { useAuth } from "../../components/AuthProvider/AuthProvider";
+import { handle } from "../../../../shared/src/utils/handle";
 import { BoldP } from "../../components/BoldP/BoldP";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
@@ -12,6 +13,10 @@ import axios from "axios"
 import "./FormLogin.css";
 
 export let FormLogin = () => {
+    
+    const {setUser} = useAuth()
+
+
     const [cedula, setCedula] = useState("");
     const [password, setPassword] = useState("");
     const [isValid, setIsValid] = useState(true);
@@ -21,6 +26,9 @@ export let FormLogin = () => {
     let navigate = useNavigate()
    
 
+    /*****************
+    |   INLINE STYLE  |
+     *****************/
     let styleBtn = {
         textAlign: "center",
         backgroundColor: "#05a505b5",
@@ -35,6 +43,10 @@ export let FormLogin = () => {
         backgroundColor: "var(--warning-txt-background)"
     }
 
+
+    /****************************
+    |   HANDE CLICK ON SEND BTN  |
+     ****************************/
     const handleClick = async () => {
         let [sendErr, data] = await handle(
             sendData({ 
@@ -42,12 +54,17 @@ export let FormLogin = () => {
                 password: password,
                 setIsValid: setIsValid, 
                 setWarningTxt: setWarningTxt,
-                navigate: navigate
-                    }))
+                navigate: navigate,
+                setUser: setUser,
+            }))
         if(sendErr) console.error("Error en login:", sendErr);
         
     }
 
+
+    /***********************
+    |   COMPONENT RETURNED  |
+     ***********************/
     return (
         <Container className="LoginCont" w="100vw" h="100vh">
             <div className="card LoginCard">
@@ -65,6 +82,7 @@ export let FormLogin = () => {
                     txt="Clave"
                     valid={isValid}
                     onChange={(e) => setPassword(e.target.value)}
+                    type="password"
                 />
 
                 <Button
@@ -77,9 +95,9 @@ export let FormLogin = () => {
     );
 };
 
-async function sendData({ cedula, password , setIsValid, setWarningTxt, navigate }) {
+async function sendData({ cedula, password , setIsValid, setWarningTxt, navigate, setUser }) {
 
-    if (!validateEnty(cedula)){
+    if (!notEmpty(cedula)){
         setIsValid(false); 
         setWarningTxt("La cedula no puede estar vacia")
         return;
@@ -91,7 +109,7 @@ async function sendData({ cedula, password , setIsValid, setWarningTxt, navigate
         return;
     }
     
-    if (!validateEnty(password)){
+    if (!notEmpty(password)){
         setIsValid(false); 
         setWarningTxt("La clave no puede estar vacia")
         return;
@@ -111,14 +129,17 @@ async function sendData({ cedula, password , setIsValid, setWarningTxt, navigate
             return;}
     }
 
+    console.log(res.data.userData)
+    setUser(res.data.userData)
     navigate("/home");
+    
         
    
     
     
 }
 
-function validateEnty(data) {
+function notEmpty(data) {
   // Verificar que el password no esté vacío
   if (data.trim() === "") return false;
    return true;

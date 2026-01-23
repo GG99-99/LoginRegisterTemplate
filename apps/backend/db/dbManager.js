@@ -6,8 +6,8 @@ import { dirname } from "path";
 import crypto from "crypto"
 import bcrypt from "bcrypt"
 
-import { userForRegister, userPublic } from './objSchemas.js';
-import { handle } from '../utils/promises/handle.js';
+import { userForRegister, userPublic } from '../../shared/src/types/objSchemas.js';
+import { handle } from '../../shared/src/utils/handle.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

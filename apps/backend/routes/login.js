@@ -2,7 +2,7 @@
 import "dotenv/config";
 import jwt from "jsonwebtoken";
 import { userdb } from "../db/dbManager.js";
-import { handle } from "../utils/promises/handle.js";
+import { handle } from "../../shared/src/utils/handle.js";
 
 function createToken(data){
      return jwt.sign(data, process.env.SECRET_JWT_KEY, {expiresIn: "1h"});

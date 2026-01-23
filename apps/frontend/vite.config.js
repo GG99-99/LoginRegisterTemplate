@@ -1,9 +1,20 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react-swc'
+import path from 'path'
+
+
+/*******************************************
+|   [ ] AGREGAR EL ALIAS AL PAQUETE SHARED  |
+ *******************************************/
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
+  resolve: {
+      alias: {
+        '@shared':  path.resolve(__dirname, '../../shared/src'),
+      }
+  },
   root: ".",
   server: {
     watch: {

@@ -1,10 +1,11 @@
 // import { text } from "express";
 import { useState } from "react";
 import { useNavigate } from 'react-router-dom';
-import { handle } from "../../../utils/promises/handle";
+import { handle } from "../../../../shared/src/utils/handle";
 import { BoldP } from "../../components/BoldP/BoldP";
 import { Input } from "../../components/Input/Input";
 import { Button } from "../../components/Button/Button";
+import { TxtCard } from "../../components/TxtCard/TxtCard";
 import { Container } from "../../components/Container/Container";
 import axios from "axios";
 
@@ -13,6 +14,7 @@ import "../FormLogin/FormLogin.css";
 export let FormRegister = () => {
     const navigate = useNavigate();
 
+    const [warningTxt, setWarningTxt] = useState("");
     const [isValid, setIsValid] = useState(true);
     const [register, setRegister] = useState(
                     {cedula: "",
@@ -20,6 +22,10 @@ export let FormRegister = () => {
                     firstName: "",
                     lastName: ""})
 
+
+    /*****************
+    |   INLINE STYLE  |
+     *****************/
     let styleBtn = {
         textAlign: "center",
         backgroundColor: "#05a505b5",
@@ -27,21 +33,49 @@ export let FormRegister = () => {
         fontWeight: 900,
     };
 
+    let styleTxtCard = {
+        display: isValid? "none": "flex",
+        color: "white",
+        fontWeight: "600",
+        backgroundColor: "var(--warning-txt-background)"
+    }
+
+
+
+    /***********************************************
+    |   UPDATE THE REGISTER STATE ON INPUT CHANGES  |
+     ***********************************************/
+
     const handleChange = ({target: {name, value}}) => {
         setRegister({...register, [name]: value})
     }
 
+
+    /****************************
+    |   HANDE CLICK ON SEND BTN  |
+     ****************************/
+
     const handleClick = async () => {
-        try { await sendData(register, setIsValid);} 
-        catch (error) { console.error("Error en login:", error);}
+        if(areEmptyField(register, setIsValid, setWarningTxt)) return;
+        let [sendErr, data] = await handle(sendData(register, setIsValid, setWarningTxt, navigate)) 
+        if(sendErr) { console.error("Error en registro:", sendErr);}
     };
+
+
+
+
+    /***********************
+    |   RETURNED COMPONENT  |
+     ***********************/
 
     return (
         <Container className="LoginCont" w="100vw" h="100vh">
             <div className="card LoginCard">
 
                 <BoldP >Registro</BoldP>
-                
+
+                <TxtCard txt={warningTxt} style={styleTxtCard} />
+
                 <Input
                     txt="Nombre"
                     valid={isValid}
@@ -69,6 +103,7 @@ export let FormRegister = () => {
                     valid={isValid}
                     name="password"
                     onChange={handleChange}
+                    type="password"
                 />
 
                 <Button txt="Enviar" style={styleBtn} onClick={handleClick} />
@@ -77,14 +112,20 @@ export let FormRegister = () => {
     );
 };
 
-async function sendData(data, setIsValid) {
+
+
+async function sendData(registerState, setIsValid, setWarningTxt,  navigate) {
+
+
+        // validar que la data no haiga ningun campo empty
     
-        if (!validateData(data)) {
+        if (!validateCedula(registerState.cedula) ) {
             setIsValid(false);
+            setWarningTxt("Formato incorrecto en la cedula")
             return;
         }
         
-        let [resErr, res] = await axios.post("/api/register", data);
+        let [resErr, res] = await handle(axios.post("/api/register", registerState));
         if(resErr){
             if (resErr.response?.status === 401) {
                 console.log("bad register");
@@ -99,15 +140,33 @@ async function sendData(data, setIsValid) {
     
 }
 
-function validateData(data) {
-    // Verificar que la cédula tenga exactamente 11 caracteres
-    //   if (cedula.length !== 11) return false;
+function isEmpty(data) {
+  // Verificar que el password no esté vacío
+  if (data.trim() === "") return true;
+   return false;
+}
 
-    // Verificar que todos los caracteres sean dígitos
-    if (!/^\d+$/.test(data.cedula)) return false;
+function areEmptyField(registerState, setIsValid, setWarningTxt){
+    for( let [key, value] of Object.entries(registerState)){
+        if(isEmpty(value)){
+            setIsValid(false)
 
-    // Verificar que el password, el name y el lastName no esten vacios
-    if (data.firstName.trim() === "" || data.lastName.trim() === "") return false;
+            if(key === "firstName") setWarningTxt(`El campo de nombre esta vacio`);
+            else if(key === "lastName") setWarningTxt(`El campo de apellido esta vacio`);
+            else if(key === "password") setWarningTxt(`El campo de clave esta vacio`);
+            else setWarningTxt(`El campo ${key} esta vacio`);
 
-    return true;
+
+            
+            return true
+            break
+        }
+    }
+
+    return false
+}
+
+function validateCedula(cedula){
+    if (!/^\d+$/.test(cedula)) return false;
+     return true;
 }

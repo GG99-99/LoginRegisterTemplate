@@ -1,0 +1,20 @@
+{
+  "name": "@loginregister/shared",
+  "version": "1.0.0",
+  "description": "\"shared package\"",
+  "license": "ISC",
+  "author": "",
+  "type": "module",
+  "main": "index.js",
+  "exports": {
+    ".": "./index.js",
+    "./types": "./src/types/objSchemas.js",
+    "./utils": "./src/utils/index.js"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "zod": "^4.3.5"
+  }
+}

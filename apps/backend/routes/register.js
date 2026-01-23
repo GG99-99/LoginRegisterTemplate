@@ -1,5 +1,5 @@
 import { userdb } from "../db/dbManager.js";
-import { userForRegister } from "../db/objSchemas.js";
+import { userForRegister } from "../../shared/src/types/objSchemas.js";
 import * as z from "zod"; 
 
 export async function register(req, res) {
